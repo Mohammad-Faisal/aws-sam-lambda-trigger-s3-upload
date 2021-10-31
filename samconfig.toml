@@ -1,0 +1,13 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "sam-lambda-trigger-s3-file-upload"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-v54n7fjqmzs2"
+s3_prefix = "sam-lambda-trigger-s3-file-upload"
+region = "ap-southeast-2"
+profile = "faisal-development"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+disable_rollback = true
+image_repositories = []

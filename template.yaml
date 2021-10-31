@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS SAM demo Lambda react to file uploaded to s3
+
+Globals:
+    Function:
+        Runtime: nodejs14.x
+        Timeout: 30
+Resources:
+    S3BucketToRespond:
+        Type: AWS::S3::Bucket
+    LambdaThatWillReactToFileUpload:
+        Type: AWS::Serverless::Function
+        Properties:
+            CodeUri: src/s3-file-upload-reaction
+            Handler: app.handler
+            Events:
+                FileUploadedToS3:
+                    Type: S3
+                    Properties:
+                        Bucket: !Ref S3BucketToRespond
+                        Events: s3:ObjectCreated:*
+    ReadS3BucketPolicy:
+        Type: AWS::IAM::Policy
+        Properties:
+            PolicyName: ReadS3BucketPolicy
+            PolicyDocument:
+                Version: '2012-10-17'
+                Statement:
+                    - Effect: Allow
+                      Action:
+                          - s3:GetObject
+                      Resource:
+                          - !Sub '${S3BucketToRespond.Arn}/*'
+            Roles:
+                - !Ref LambdaThatWillReactToFileUploadRole
